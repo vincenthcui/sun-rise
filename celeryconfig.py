@@ -1,13 +1,21 @@
 import os
 
+from celery.schedules import crontab
 
 broker_url = os.getenv('BROKER_URL', 'redis://localhost:6379/10')
-result_backend = os.getenv('BACKEND_URL', 'redis://localhost:6379/11')
 
 include = [
     'tasks.test',
+    'tasks.wechat',
+    'tasks.source.zhzgj',
 ]
 
+beat_schedule = {
+    'source.zhzgj': {
+        'task': 'source.zhzgj',
+        'schedule': crontab(minute='*'),
+    }
+}
 
 # for business
 alert_user = os.getenv('ALERT_USER', 'filehelper')

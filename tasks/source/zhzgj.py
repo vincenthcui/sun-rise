@@ -1,7 +1,5 @@
-# -*- coding: UTF-8 -*-
-import itchat
-from celery.utils.log import get_task_logger
 from bs4 import BeautifulSoup
+from celery.utils.log import get_task_logger
 import requests
 from urlparse import urljoin
 
@@ -10,16 +8,12 @@ from app import app
 from tasks.wechat import send_msg
 from utils import look_same, is_exists
 
-
 url = 'http://www.zhzgj.gov.cn/zwfw/ywgs/kzxxxgh_50440/'
-
 logger = get_task_logger(__name__)
 
-itchat.auto_login(hotReload=True, enableCmdQR=2, statusStorageDir='run/wechat.pkl')
 
-
-@app.task
-def pull():
+@app.task(name='source.zhzgj')
+def run():
     resp = requests.get(url)
     logger.debug('request %s [%d] %s', url, resp.status_code, resp.content)
 
@@ -46,6 +40,6 @@ def pull():
             continue
 
         msg = '%s\n%s' % (title, href)
-        send_msg(msg)
+        send_msg.delay(msg)
 
         logger.info('send msg to receiver: %s', msg)
