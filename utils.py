@@ -1,3 +1,4 @@
+import functools
 import hashlib
 import redis
 
@@ -40,3 +41,21 @@ def is_exists(key, value):
         client.ltrim(key, 0, 100)
 
     return value in exists
+
+
+__CACHED__ = {}
+
+
+def cached(func):
+    global __CACHED__
+
+    @functools.wraps(func)
+    def inner(*args, **kwargs):
+        key = (func.func_name, args)
+
+        if key not in __CACHED__:
+            __CACHED__[key] = func(*args, **kwargs)
+
+        return __CACHED__[key]
+
+    return inner

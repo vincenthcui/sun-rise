@@ -41,5 +41,3 @@ def run():
 
         msg = '%s\n%s' % (title, href)
         send_msg(msg)
-
-        logger.info('send msg to receiver: %s', msg)

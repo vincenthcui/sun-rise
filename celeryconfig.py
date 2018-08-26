@@ -22,7 +22,7 @@ beat_schedule = {
 
 # for business
 receive_user = os.getenv('RECEIVE_USER', 'filehelper')
-receive_user = receive_user.split(',')
+receive_user = [unicode(x, 'utf8').decode('unicode-escape') for x in receive_user.split(',')]
 
 store_db = int(os.getenv('STORE_DB', 1))
 store_url = 'redis://%s:%d/%d' % (redis_host, redis_port, store_db)

@@ -4,7 +4,7 @@ services:
   redis:
     image: redis
     volumes:
-      - ./redis-data:/data
+      - ./run/redis-data:/data
   worker:
     build: .
     command: celery -A app worker -l info
