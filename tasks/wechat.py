@@ -15,5 +15,8 @@ def send_msg(msg):
 
 @app.task(name='wechat.send_msg',  rate_limit='1/s')
 def send_msg_to_user(user, msg):
-    logger.info('send msg to %s: %s', user, msg)
-    itchat.send(msg, toUserName=user)
+    resp = itchat.send(msg, toUserName=user)
+    if not resp:
+        logger.error('send msg to %s faild: msg=%s, error=%s', user, msg, resp)
+    else:
+        logger.info('send msg to %s: %s', user, msg)
