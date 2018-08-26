@@ -1,13 +1,7 @@
 import hashlib
-import re
 import redis
 
-from celeryconfig import store_url
-
-
-def parse_redis_params(url):
-    pattern = r'redis://([0-9.]+|localhost):(\d+)/(\d+)'
-    return re.search(pattern, url).groups()
+from celeryconfig import redis_host, redis_port, store_db
 
 
 def page_hash(content):
@@ -18,8 +12,7 @@ def page_hash(content):
 
 
 def get_redis_cli():
-    host, port, db = parse_redis_params(store_url)
-    return redis.StrictRedis(host=host, port=port, db=db)
+    return redis.StrictRedis(host=redis_host, port=redis_port, db=store_db)
 
 
 def look_same(key, value):

@@ -1,8 +1,11 @@
 import os
-
 from celery.schedules import crontab
 
-broker_url = os.getenv('BROKER_URL', 'redis://localhost:6379/10')
+redis_host = os.getenv('REDIS_HOST', 'localhost')
+redis_port = int(os.getenv('REDIS_PORT', 6379))
+
+broker_db = int(os.getenv('BROKER_DB', 0))
+broker_url = 'redis://%s:%d/%d' % (redis_host, redis_port, broker_db)
 
 include = [
     'tasks.test',
@@ -18,6 +21,8 @@ beat_schedule = {
 }
 
 # for business
-alert_user = os.getenv('ALERT_USER', 'filehelper')
 receive_user = os.getenv('RECEIVE_USER', 'filehelper')
-store_url = os.getenv('STORE_URL', 'redis://localhost:6379/9')
+receive_user = receive_user.split(',')
+
+store_db = int(os.getenv('STORE_DB', 1))
+store_url = 'redis://%s:%d/%d' % (redis_host, redis_port, store_db)

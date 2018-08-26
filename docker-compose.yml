@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  redis:
+    image: redis
+    volumes:
+      - ./redis-data:/data
+  worker:
+    build: .
+    command: celery -A app worker -l info
+    environment:
+      - REDIS_HOST=redis
+    volumes:
+      - ./run:/app/run
+  beat:
+    build: .
+    command: celery -A app beat -l info -s run/celerybeat-schedule
+    environment:
+      - REDIS_HOST=redis
+    volumes:
+      - ./run:/app/run
