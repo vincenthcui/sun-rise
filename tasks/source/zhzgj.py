@@ -40,6 +40,6 @@ def run():
             continue
 
         msg = '%s\n%s' % (title, href)
-        send_msg.delay(msg)
+        send_msg(msg)
 
         logger.info('send msg to receiver: %s', msg)
