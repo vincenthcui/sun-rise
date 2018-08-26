@@ -11,4 +11,4 @@ app.config_from_object(celeryconfig)
 @worker_init.connect()
 def login_wechat(*args, **kwargs):
     import itchat
-    itchat.auto_login(hotReload=True, enableCmdQR=True, statusStorageDir='run/wechat.pkl')
+    itchat.auto_login(hotReload=True, enableCmdQR=2, statusStorageDir='run/wechat.pkl')
