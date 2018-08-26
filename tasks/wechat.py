@@ -31,6 +31,6 @@ def send_msg_to_user(user, msg):
 
     resp = itchat.send(msg, toUserName=username)
     if not resp:
-        logger.error('send msg to %s faild: msg=%s, error=%s', user, msg, resp)
+        logger.error('send msg to %s(%s) failed: msg=%s, error=%s', user, username, msg, resp)
     else:
-        logger.info('send msg to %s: %s', user, msg)
+        logger.info('send msg to %s(%s): %s', user, username, msg)
