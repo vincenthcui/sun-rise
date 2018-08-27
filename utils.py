@@ -5,7 +5,7 @@ import redis
 from celeryconfig import redis_host, redis_port, store_db
 
 
-def page_hash(content):
+def md5_hash(content):
     m = hashlib.md5()
     m.update(content)
 
@@ -21,7 +21,7 @@ def look_same(key, value):
     key = 'duplicate:%s' % key
 
     old = client.get(key)
-    new = page_hash(value)
+    new = md5_hash(value)
 
     if old != new:
         client.set(key, new)
@@ -41,6 +41,16 @@ def is_exists(key, value):
         client.ltrim(key, 0, 100)
 
     return value in exists
+
+
+def is_recent(key, value, expire=60):
+    client = get_redis_cli()
+    key = 'recent:%s:%s' % (key, md5_hash(value))
+
+    is_exist = client.get(key)
+    client.set(key, True, ex=expire)
+
+    return bool(is_exist)
 
 
 __CACHED__ = {}

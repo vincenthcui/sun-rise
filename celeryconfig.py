@@ -11,13 +11,18 @@ include = [
     'tasks.test',
     'tasks.wechat',
     'tasks.source.zhzgj',
+    'tasks.source.zhmb',
 ]
 
 beat_schedule = {
     'source.zhzgj': {
         'task': 'source.zhzgj',
         'schedule': crontab(minute='*'),
-    }
+    },
+    'source.zhmb': {
+        'task': 'source.zhmb',
+        'schedule': crontab(minute='*'),
+    },
 }
 
 # for business
